@@ -20,6 +20,9 @@
 
 <!-- TODO: demo GIF of a coding agent writing an article -->
 
+![Supportpages](https://app.supportpages.io/rails/active_storage/blobs/proxy/eyJfcmFpbHMiOnsiZGF0YSI6MTE5OTUsInB1ciI6ImJsb2JfaWQifX0=--815e8653b13e2391153f2c04a3b45ea63ca2dec6/block_start-new-shell.png)
+
+
 SupportPages Writer turns [Claude Code](https://claude.com/claude-code) or
 [Codex](https://github.com/openai/codex) into a technical writer for your product.
 Ask for a guide ("how do I invite a teammate?") and your agent reads the code,
@@ -30,7 +33,11 @@ Set it up once in your terminal, then just ask your agent:
 
 ```sh
 curl -fsSL https://downloads.supportpages.io/install.sh | bash
+```
+```sh
 supportpages setup          # once per computer
+```
+```sh
 supportpages init           # once per project
 ```
 
