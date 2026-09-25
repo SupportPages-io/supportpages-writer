@@ -1,0 +1,42 @@
+{
+  "kind": "sections",
+  "items": [
+    {
+      "id": "584768542",
+      "name": "Getting Started",
+      "slug": "getting-started",
+      "description": "Set up and configure the basics to get up and running",
+      "justification": null,
+      "status": "accepted",
+      "visible": true
+    },
+    {
+      "id": "599425530",
+      "name": "Troubleshooting",
+      "slug": "troubleshooting",
+      "description": "Solve common problems and find answers to FAQs",
+      "justification": null,
+      "status": "accepted",
+      "visible": true
+    },
+    {
+      "id": "841848443",
+      "name": "Advanced Usage",
+      "slug": "advanced-usage",
+      "description": "Power user features, customization, and integrations",
+      "justification": null,
+      "status": "accepted",
+      "visible": true
+    },
+    {
+      "id": "863394652",
+      "name": "Internal Notes",
+      "slug": "internal-notes",
+      "description": "Not shown on the public help centre",
+      "justification": null,
+      "status": "accepted",
+      "visible": false
+    }
+  ],
+  "next_cursor": null
+}

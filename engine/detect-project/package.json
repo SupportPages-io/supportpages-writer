@@ -1,0 +1,10 @@
+{
+  "name": "rtfm-detect-branding",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Detect a project's visual structure, build its mockup CSS, and recommend a low/medium/high mockup model tier",
+  "scripts": {
+    "test": "node scripts/test_classify_surface.js && node scripts/test_runtime_coverage.js && node scripts/test_runtime_recipe_quality.js && node scripts/test_recommend_model_tier.js && node scripts/test_resolve_route_chains.js && node scripts/test_node_helpers.js"
+  },
+  "dependencies": {}
+}

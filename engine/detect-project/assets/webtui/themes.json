@@ -1,0 +1,37 @@
+{
+  "catppuccin": {
+    "file": "theme-catppuccin.css",
+    "attr": "catppuccin-mocha",
+    "background": "#1e1e2e",
+    "foreground": "#cdd6f4",
+    "accent": "#89b4fa"
+  },
+  "gruvbox": {
+    "file": "theme-gruvbox.css",
+    "attr": "gruvbox-dark-medium",
+    "background": "#282828",
+    "foreground": "#ebdbb2",
+    "accent": "#83a598"
+  },
+  "nord": {
+    "file": "theme-nord.css",
+    "attr": "nord",
+    "background": "#2e3440",
+    "foreground": "#eceff4",
+    "accent": "#88c0d0"
+  },
+  "vitesse": {
+    "file": "theme-vitesse.css",
+    "attr": "vitesse-dark",
+    "background": "#121212",
+    "foreground": "#dbd7ca",
+    "accent": "#6394bf"
+  },
+  "everforest": {
+    "file": "theme-everforest.css",
+    "attr": "everforest-dark-medium",
+    "background": "#2d353b",
+    "foreground": "#d3c6aa",
+    "accent": "#7fbbb3"
+  }
+}

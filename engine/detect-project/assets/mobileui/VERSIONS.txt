@@ -1,0 +1,6 @@
+Built: 2026-07-02T16:14:45Z
+framework7@8.3.4
+framework7-icons@5.0.5
+esbuild@0.21.5 (build-time only)
+Inter: https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2 sha256=c940764593d0fe5d596be327ca7558855e018039fb78509aa21921fd3644c3e4
+Roboto: https://fonts.gstatic.com/s/roboto/v51/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2 sha256=0a44e0bb6ba5c8537e8814c148ef7755f1bce12112361231f595ecc584a18d7a

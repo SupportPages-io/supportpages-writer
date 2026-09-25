@@ -1,0 +1,13 @@
+fonts.css embeds two variable fonts as data URIs:
+
+- Inter (registered under the family name 'SF Pro Text' so Framework7's iOS
+  font stack resolves it offline) — Copyright The Inter Project Authors,
+  licensed under the SIL Open Font License 1.1
+  (https://github.com/rsms/inter/blob/master/LICENSE.txt).
+  Source: https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2
+- Roboto — Copyright The Roboto Project Authors, licensed under the
+  Apache License 2.0 (https://github.com/googlefonts/roboto-classic).
+  Source: https://fonts.gstatic.com/s/roboto/v51/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2
+
+'SF Pro Text' is an alias used for font-stack resolution only; no Apple font
+data is included in this bundle.

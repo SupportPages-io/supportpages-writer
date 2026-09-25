@@ -1,0 +1,316 @@
+/* device-frame.css — hand-authored phone chrome for mobile-mode mockups.
+ * Concatenated AFTER framework7-core/components/md3-defaults/fonts/icons by
+ * detect-project's mobile branch (brand-overrides.css comes last of all).
+ * Framework7 ships no @layer, so plain source order gives these rules
+ * precedence over core on any conflict.
+ *
+ * These classes ship in branding.css on purpose: the fidelity lint hard-fails
+ * classes that a mockup defines in its own <style> block, so the frame must be
+ * pre-defined here and mockups may only USE these class names.
+ *
+ * The load-bearing bits:
+ *   - .device-stage's 48px padding pairs with the ios/android viewport presets
+ *     in render_mockup.js (preset width = device outer width + 96) so the
+ *     content crop yields symmetric 48px margins.
+ *   - .device--ios/.device--android set --f7-safe-area-top/bottom; Framework7's
+ *     own navbar/toolbar/page-content offsets consume those vars, so F7 chrome
+ *     clears the statusbar and home indicator exactly like on a real device.
+ *   - .device-screen is a fixed-size, overflow:hidden canvas: it satisfies
+ *     F7's html/body/.framework7-root height:100% chain and does the clipping
+ *     for screens whose content is realistically taller than one viewport.
+ *   - Statusbar glyphs (signal/wifi/battery) are pure CSS via currentColor —
+ *     never emoji (the fidelity lint hard-fails emoji code points).
+ */
+
+/* F7's JS sets --f7-ripple-transform per-tap at runtime; core's .ripple-wave
+ * consumes it with no fallback, which trips the CSS-health undefined-var check
+ * (check_css_health.js / lint check 8b). Static mockups never contain a live
+ * ripple, so a neutral default is both correct and silences the finding. */
+:root {
+    --f7-ripple-transform: translate3d(0, 0, 0) scale(1);
+}
+
+.device-stage {
+    margin: 0;
+    /* height:auto overrides F7 core's body{height:100%} so the body hugs the
+     * device and the renderer's content crop lands at device bottom + 48px.
+     * No bottom padding for the same reason: the crop adds its own 48px, and
+     * the body background propagates to the canvas, so the margin paints. */
+    height: auto;
+    box-sizing: border-box;
+    padding: 48px 48px 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #eef0f3;
+}
+
+.device {
+    position: relative;
+    box-sizing: content-box;
+    flex-shrink: 0;
+    background: #1a1a1c;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.06);
+}
+
+.device--ios {
+    padding: 12px;
+    border-radius: 56px;
+    --f7-safe-area-top: 59px;
+    --f7-safe-area-bottom: 34px;
+}
+
+.device--android {
+    padding: 10px;
+    border-radius: 34px;
+    --f7-safe-area-top: 28px;
+    --f7-safe-area-bottom: 24px;
+}
+
+.device-screen {
+    position: relative;
+    overflow: hidden;
+    background: var(--f7-page-bg-color, #fff);
+}
+
+.device--ios .device-screen {
+    width: 393px;
+    height: 852px;
+    border-radius: 44px;
+}
+
+.device--android .device-screen {
+    width: 412px;
+    height: 915px;
+    border-radius: 24px;
+}
+
+/* Real F7 centers iOS navbar titles by measuring with JS; the static render
+ * has no JS, so give the title the full track and center it. MD titles are
+ * left-aligned by design and need nothing. */
+.ios .navbar .title {
+    flex: 1;
+    text-align: var(--f7-navbar-title-text-align, center);
+}
+
+/* ── Statusbar (author INSIDE .device-screen, before the app content) ────── */
+
+.device-statusbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20000; /* above F7 modals (~13500) — like a real phone */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    pointer-events: none;
+    color: #0a0a0a;
+}
+
+.device--ios .device-statusbar {
+    height: 59px;
+    padding: 6px 36px 12px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.device--android .device-statusbar {
+    height: 28px;
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.device-statusbar-time {
+    letter-spacing: -0.01em;
+}
+
+.device-statusbar-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Four bottom-aligned bars, drawn with layered currentColor gradients. */
+.device-signal {
+    width: 19px;
+    height: 12px;
+    background-image: linear-gradient(currentColor, currentColor),
+        linear-gradient(currentColor, currentColor),
+        linear-gradient(currentColor, currentColor),
+        linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-size: 3px 5px, 3px 7px, 3px 9px, 3px 12px;
+    background-position: 0 100%, 5px 100%, 10px 100%, 15px 100%;
+}
+
+/* Two concentric top-border arcs + a dot via radial-gradient. */
+.device-wifi {
+    position: relative;
+    width: 18px;
+    height: 13px;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 80%, currentColor 1.8px, transparent 2.2px);
+}
+
+.device-wifi::before,
+.device-wifi::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+}
+
+.device-wifi::before {
+    width: 17px;
+    height: 17px;
+    top: 0;
+}
+
+.device-wifi::after {
+    width: 9px;
+    height: 9px;
+    top: 4px;
+}
+
+/* Bordered shell, charge fill (::before), terminal nub (::after). */
+.device-battery {
+    position: relative;
+    width: 25px;
+    height: 12px;
+    border: 1px solid;
+    border-radius: 4px;
+    opacity: 0.95;
+}
+
+.device-battery::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    width: 65%;
+    background: currentColor;
+    border-radius: 1.5px;
+}
+
+.device-battery::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 4px;
+    background: currentColor;
+    border-radius: 0 1px 1px 0;
+}
+
+/* ── Cutouts + indicators (also INSIDE .device-screen) ───────────────────── */
+
+.device-dynamic-island {
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 122px;
+    height: 36px;
+    border-radius: 18px;
+    background: #000;
+    z-index: 20001;
+}
+
+/* Legacy-iOS variant, for completeness. */
+.device-notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 210px;
+    height: 30px;
+    border-radius: 0 0 20px 20px;
+    background: #000;
+    z-index: 20001;
+}
+
+.device-camera-dot {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #111;
+    z-index: 20001;
+}
+
+.device-home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 20000;
+}
+
+.device-gesture-pill {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 108px;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(32, 33, 36, 0.75);
+    z-index: 20000;
+}
+
+/* Override-proof top offset with a safe-area floor. Two observed failure
+ * modes (Bluesky, LocalSend benchmarks): (1) models write style="padding:16px"
+ * on .page-content and the SHORTHAND wipes F7's computed navbar padding-top;
+ * (2) on navbar-less pages F7 sets no offset at all, so content renders under
+ * the statusbar — a real phone's safe area never allows that. Reassert F7's
+ * own calc with a safe-area minimum. Scoped to .page > .page-content so
+ * overlay content (sheets/dialogs) is untouched; inline padding-left/right/
+ * bottom keep working. */
+.device-screen .page > .page-content {
+    padding-top: max(
+        calc(
+            var(--f7-page-navbar-offset, 0px) + var(--f7-page-toolbar-top-offset, 0px) +
+            var(--f7-page-subnavbar-offset, 0px) + var(--f7-page-searchbar-offset, 0px) +
+            var(--f7-page-content-extra-padding-top, 0px)
+        ),
+        var(--f7-safe-area-top, 0px)
+    ) !important;
+}
+
+/* The render viewport (513/528px) is wider than F7's 496px phone breakpoint,
+ * which would give action sheets their 480px tablet width — wider than the
+ * device screen itself. Re-pin overlays to phone geometry inside the frame
+ * (this selector's specificity beats the media-wrapped one, so the vendored
+ * files stay verbatim). */
+.device-screen .actions-modal {
+    width: 100%;
+    left: 0;
+    margin-left: 0;
+}
+
+/* Dark-theme staging (pairs with F7's .dark root class; unused while mobile
+ * mode is light-only, staged for the dark-theme follow-up). */
+.device--dark .device-statusbar {
+    color: #f5f5f7;
+}
+
+.device--dark .device-home-indicator {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.device--dark .device-gesture-pill {
+    background: rgba(232, 234, 237, 0.75);
+}

@@ -1,0 +1,46 @@
+{
+  "ios": {
+    "attr": "ios",
+    "device_class": "device--ios",
+    "viewport": "ios",
+    "screen": {
+      "width": 393,
+      "height": 852
+    },
+    "safe_area": {
+      "top": 59,
+      "bottom": 34
+    },
+    "statusbar": {
+      "style": "dynamic-island",
+      "time": "9:41"
+    },
+    "background": "#efeff4",
+    "foreground": "#000000",
+    "accent": "#007aff",
+    "font_family": "SF Pro Text",
+    "font_stack": "-apple-system, 'SF Pro Text', system-ui, 'Helvetica Neue', Arial, sans-serif"
+  },
+  "android": {
+    "attr": "md",
+    "device_class": "device--android",
+    "viewport": "android",
+    "screen": {
+      "width": 412,
+      "height": 915
+    },
+    "safe_area": {
+      "top": 28,
+      "bottom": 24
+    },
+    "statusbar": {
+      "style": "punch-hole",
+      "time": "9:41"
+    },
+    "background": "#fefbff",
+    "foreground": "#1c1b1f",
+    "accent": "#005bc1",
+    "font_family": "Roboto",
+    "font_stack": "Roboto, system-ui, Noto, Helvetica, Arial, sans-serif"
+  }
+}

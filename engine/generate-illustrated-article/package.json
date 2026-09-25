@@ -1,0 +1,15 @@
+{
+  "name": "rtfm-generate-illustrated-article",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bundled renderer for the generate-illustrated-article skill",
+  "scripts": {
+    "test": "node scripts/test_related_repos.js && node scripts/test_source_paths.js && node scripts/test_label_evidence.js && node scripts/test_control_visibility.js && node scripts/test_generate_content_images.js && node scripts/test_lint_article_copy.js && node scripts/test_lint_mockup_fidelity.js && node scripts/test_render_ready.js && node scripts/test_polish_tickets.js && node scripts/test_include_census.js && node scripts/test_emit_walkthrough_signals.js && node scripts/test_node_ports.js"
+  },
+  "dependencies": {
+    "puppeteer": "25.11.0"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.rtfm/
+.rtfm-trace/
+output/
+*.tgz
+.env
+
+release/
+
+# Local and editor files.
+.DS_Store
+.env*
+/coverage/
+/tmp/
+*.log

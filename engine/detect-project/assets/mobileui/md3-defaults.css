@@ -1,0 +1,89 @@
+/* md3-defaults.css — the default Framework7 palette for seed #007aff.
+   F7 generates these custom properties in JS at runtime; the static render
+   has no JS, so they are baked in here. A detect-time brand-overrides.css
+   (same generator, the app's brand hex) concatenates later and wins. */
+:root {
+  --f7-ios-primary: #007aff;
+  --f7-ios-primary-shade: #0066d6;
+  --f7-ios-primary-tint: #298fff;
+  --f7-ios-primary-rgb: 0, 122, 255;
+  --f7-md-primary-shade: #004898;
+  --f7-md-primary-tint: #006eea;
+  --f7-md-primary-rgb: 0, 91, 193;
+  --f7-md-primary: #005bc1;
+  --f7-md-on-primary: #ffffff;
+  --f7-md-primary-container: #d8e2ff;
+  --f7-md-on-primary-container: #001a41;
+  --f7-md-secondary: #565e71;
+  --f7-md-on-secondary: #ffffff;
+  --f7-md-secondary-container: #dbe2f9;
+  --f7-md-on-secondary-container: #141b2c;
+  --f7-md-surface: #fefbff;
+  --f7-md-on-surface: #1b1b1f;
+  --f7-md-surface-variant: #e1e2ec;
+  --f7-md-on-surface-variant: #44474f;
+  --f7-md-outline: #74777f;
+  --f7-md-outline-variant: #c4c6d0;
+  --f7-md-inverse-surface: #303033;
+  --f7-md-inverse-on-surface: #f2f0f4;
+  --f7-md-inverse-primary: #adc6ff;
+  --f7-md-surface-1: #f1f3fc;
+  --f7-md-surface-2: #eaeefa;
+  --f7-md-surface-3: #e2e9f8;
+  --f7-md-surface-4: #e0e8f8;
+  --f7-md-surface-5: #dae5f6;
+  --f7-md-surface-variant-rgb: 225, 226, 236;
+  --f7-md-on-surface-variant-rgb: 68, 71, 79;
+  --f7-md-surface-1-rgb: 241, 243, 252;
+  --f7-md-surface-2-rgb: 234, 238, 250;
+  --f7-md-surface-3-rgb: 226, 233, 248;
+  --f7-md-surface-4-rgb: 224, 232, 248;
+  --f7-md-surface-5-rgb: 218, 229, 246;
+}
+.ios {
+  --f7-theme-color: var(--f7-ios-primary);
+  --f7-theme-color-rgb: var(--f7-ios-primary-rgb);
+  --f7-theme-color-shade: var(--f7-ios-primary-shade);
+  --f7-theme-color-tint: var(--f7-ios-primary-tint);
+}
+.md {
+  --f7-theme-color: var(--f7-md-primary);
+  --f7-theme-color-rgb: var(--f7-md-primary-rgb);
+  --f7-theme-color-shade: var(--f7-md-primary-shade);
+  --f7-theme-color-tint: var(--f7-md-primary-tint);
+}
+.dark {
+  --f7-md-primary-shade: #84aaff;
+  --f7-md-primary-tint: #d6e2ff;
+  --f7-md-primary-rgb: 173, 198, 255;
+  --f7-md-primary: #adc6ff;
+  --f7-md-on-primary: #002e69;
+  --f7-md-primary-container: #004493;
+  --f7-md-on-primary-container: #d8e2ff;
+  --f7-md-secondary: #bfc6dc;
+  --f7-md-on-secondary: #293041;
+  --f7-md-secondary-container: #3f4759;
+  --f7-md-on-secondary-container: #dbe2f9;
+  --f7-md-surface: #1b1b1f;
+  --f7-md-on-surface: #e3e2e6;
+  --f7-md-surface-variant: #44474f;
+  --f7-md-on-surface-variant: #c4c6d0;
+  --f7-md-outline: #8e9099;
+  --f7-md-outline-variant: #44474f;
+  --f7-md-inverse-surface: #e3e2e6;
+  --f7-md-inverse-on-surface: #303033;
+  --f7-md-inverse-primary: #005bc1;
+  --f7-md-surface-1: #22242a;
+  --f7-md-surface-2: #272931;
+  --f7-md-surface-3: #2b2e38;
+  --f7-md-surface-4: #2d303a;
+  --f7-md-surface-5: #2f333e;
+  --f7-md-surface-variant-rgb: 68, 71, 79;
+  --f7-md-on-surface-variant-rgb: 196, 198, 208;
+  --f7-md-surface-1-rgb: 34, 36, 42;
+  --f7-md-surface-2-rgb: 39, 41, 49;
+  --f7-md-surface-3-rgb: 43, 46, 56;
+  --f7-md-surface-4-rgb: 45, 48, 58;
+  --f7-md-surface-5-rgb: 47, 51, 62;
+}
+

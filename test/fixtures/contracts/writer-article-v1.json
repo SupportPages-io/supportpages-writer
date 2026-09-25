@@ -1,0 +1,79 @@
+{
+  "repository_connection": {
+    "state": "not_connected",
+    "ready": false,
+    "detection_status": null,
+    "connect_url": "http://app.localhost:3001/projects/rtfm/repository_connection?source=completion",
+    "capabilities": {
+      "sections": false,
+      "suggestions": false,
+      "code_analysis": false,
+      "maintenance": false
+    }
+  },
+  "id": "989034056",
+  "revision": "adb2ba0f654f4652d6e95cd491dc79976de0f28d0a1442474a5f51d098b8c0e5",
+  "status": "draft",
+  "editor_url": "http://app.localhost:3001/projects/rtfm/articles_page?article=989034056",
+  "public_url": null,
+  "title": "Updated draft",
+  "source": "ai",
+  "content_format": "structured",
+  "generation_status": "generation_completed",
+  "content": {
+    "schema_version": 2,
+    "article_type": "how-to",
+    "blocks": [
+      {
+        "id": "introduction",
+        "type": "prose",
+        "presentation": "lead",
+        "content": "This guide will show you how to enable dark mode."
+      },
+      {
+        "id": "prerequisites",
+        "type": "list",
+        "presentation": "checklist",
+        "title": "Prerequisites",
+        "items": [
+          "A modern browser",
+          "Access to settings"
+        ]
+      },
+      {
+        "id": "step-1",
+        "type": "section",
+        "presentation": "numbered",
+        "title": "Open Settings",
+        "content": "Navigate to the settings panel.",
+        "has_image": false
+      },
+      {
+        "id": "step-2",
+        "type": "section",
+        "presentation": "numbered",
+        "title": "Find Theme Options",
+        "content": "Look for the theme or appearance section.",
+        "has_image": false
+      },
+      {
+        "id": "tips",
+        "type": "list",
+        "presentation": "tips",
+        "title": "Tips",
+        "items": [
+          "Dark mode is easier on the eyes at night.",
+          "Some apps have auto-switching based on time."
+        ]
+      },
+      {
+        "id": "summary",
+        "type": "prose",
+        "presentation": "summary",
+        "content": "You've now learned how to enable dark mode!",
+        "title": "Summary"
+      }
+    ],
+    "title": "Updated draft"
+  }
+}

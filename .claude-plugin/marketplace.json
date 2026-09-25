@@ -1,0 +1,14 @@
+{
+  "name": "supportpages",
+  "owner": { "name": "SupportPages", "url": "https://supportpages.io" },
+  "description": "SupportPages Writer: illustrated help articles written by your coding agent from your codebase.",
+  "plugins": [
+    {
+      "name": "supportpages-writer",
+      "description": "Your coding agent writes illustrated help articles from your codebase, with screenshots rendered from the real interface code.",
+      "source": { "source": "url", "url": "https://github.com/SupportPages-io/supportpages-writer.git", "ref": "plugin" },
+      "homepage": "https://github.com/SupportPages-io/supportpages-writer#readme",
+      "license": "Apache-2.0"
+    }
+  ]
+}

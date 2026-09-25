@@ -1,0 +1,23 @@
+SupportPages Writer
+Copyright 2026 Surface Layer Limited
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+"SupportPages" and "supportpages.io" are trademarks of their owner; the license
+grants no rights to use them (Apache License 2.0, section 6).
+
+Third-party components
+----------------------
+
+engine/detect-project/assets/ vendors UI stylesheets, each with its license
+file beside it:
+  - WebTUI (webtui/LICENSE-webtui.txt)
+  - Framework7 and its fonts (mobileui/LICENSE-framework7.txt, LICENSE-fonts.txt)
+  - 7.css (win32ui/LICENSE-7css.txt)
+  - Puppertino (macosui/LICENSE-puppertino.txt)
+
+engine/detect-project/assets/tailwind-fallback.css contains a reset derived from
+Tailwind CSS Preflight (MIT License, Copyright (c) Tailwind Labs, Inc.) and
+modern-normalize (MIT License, Copyright (c) Sindre Sorhus).
+
+Standalone release archives also bundle Node.js and npm, which carry their own
+licenses inside the archive.

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.supportpages-io/supportpages-writer",
+  "title": "SupportPages Writer",
+  "description": "Your coding agent writes illustrated help articles from your codebase, with screenshots rendered from the real interface code.",
+  "repository": {
+    "url": "https://github.com/SupportPages-io/supportpages-writer",
+    "source": "github"
+  },
+  "version": "0.2.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "supportpages-writer",
+      "version": "0.2.2",
+      "transport": {
+        "type": "stdio"
+      },
+      "packageArguments": [
+        {
+          "type": "positional",
+          "value": "mcp"
+        }
+      ]
+    }
+  ]
+}

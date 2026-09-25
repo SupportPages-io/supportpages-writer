@@ -1,0 +1,229 @@
+{
+  "version": 1,
+  "actions": {
+    "read_articles": {
+      "action": "read_articles",
+      "allowed": true,
+      "execution": "remote",
+      "required_scopes": [
+        "read"
+      ],
+      "next_step": null
+    },
+    "create_article": {
+      "action": "create_article",
+      "allowed": false,
+      "execution": "hosted",
+      "required_scopes": [
+        "read",
+        "generate"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "create_article",
+        "missing_scopes": [
+          "generate"
+        ]
+      }
+    },
+    "update_article": {
+      "action": "update_article",
+      "allowed": false,
+      "execution": "remote",
+      "required_scopes": [
+        "read",
+        "manage"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "update_article",
+        "missing_scopes": [
+          "manage"
+        ]
+      }
+    },
+    "edit_article": {
+      "action": "edit_article",
+      "allowed": false,
+      "execution": "hosted",
+      "required_scopes": [
+        "read",
+        "manage",
+        "generate"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "edit_article",
+        "missing_scopes": [
+          "manage",
+          "generate"
+        ]
+      }
+    },
+    "publish_article": {
+      "action": "publish_article",
+      "allowed": false,
+      "execution": "remote",
+      "required_scopes": [
+        "read",
+        "publish"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "publish_article",
+        "missing_scopes": [
+          "publish"
+        ]
+      }
+    },
+    "unpublish_article": {
+      "action": "unpublish_article",
+      "allowed": false,
+      "execution": "remote",
+      "required_scopes": [
+        "read",
+        "publish"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "unpublish_article",
+        "missing_scopes": [
+          "publish"
+        ]
+      }
+    },
+    "delete_article": {
+      "action": "delete_article",
+      "allowed": false,
+      "execution": "remote",
+      "required_scopes": [
+        "read",
+        "manage"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "delete_article",
+        "missing_scopes": [
+          "manage"
+        ]
+      }
+    },
+    "find_article_gaps": {
+      "action": "find_article_gaps",
+      "allowed": false,
+      "execution": "hosted",
+      "required_scopes": [
+        "read",
+        "generate"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "find_article_gaps",
+        "missing_scopes": [
+          "generate"
+        ]
+      }
+    },
+    "suggest_sections": {
+      "action": "suggest_sections",
+      "allowed": false,
+      "execution": "hosted",
+      "required_scopes": [
+        "read",
+        "generate"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "suggest_sections",
+        "missing_scopes": [
+          "generate"
+        ]
+      }
+    },
+    "recommend_articles": {
+      "action": "recommend_articles",
+      "allowed": false,
+      "execution": "hosted",
+      "required_scopes": [
+        "read",
+        "generate"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "recommend_articles",
+        "missing_scopes": [
+          "generate"
+        ]
+      }
+    },
+    "review_sections": {
+      "action": "review_sections",
+      "allowed": false,
+      "execution": "remote",
+      "required_scopes": [
+        "read",
+        "manage"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "review_sections",
+        "missing_scopes": [
+          "manage"
+        ]
+      }
+    },
+    "review_recommendations": {
+      "action": "review_recommendations",
+      "allowed": false,
+      "execution": "remote",
+      "required_scopes": [
+        "read",
+        "manage"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "review_recommendations",
+        "missing_scopes": [
+          "manage"
+        ]
+      }
+    },
+    "create_video_walkthrough": {
+      "action": "create_video_walkthrough",
+      "allowed": false,
+      "execution": "hosted",
+      "required_scopes": [
+        "read",
+        "generate"
+      ],
+      "next_step": {
+        "code": "permission_required",
+        "message": "Approve the missing device permissions, then retry this action.",
+        "requested_action": "create_video_walkthrough",
+        "missing_scopes": [
+          "generate"
+        ]
+      }
+    },
+    "get_operation": {
+      "action": "get_operation",
+      "allowed": true,
+      "execution": "remote",
+      "required_scopes": [
+        "read"
+      ],
+      "next_step": null
+    }
+  }
+}

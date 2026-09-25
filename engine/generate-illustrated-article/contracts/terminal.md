@@ -1,0 +1,29 @@
+### Terminal mockup contract (terminal projects ONLY — replaces the web rules above)
+
+> Extracted verbatim from `generate-illustrated-article/SKILL.md` (Phase 3) on 2026-09-07 so the skill body stays under cursor-agent's ~100k-character inline cap. SKILL.md's Phase 3 gate for `app_type: "terminal"` points here; this file **is** the contract — follow it exactly as if it were printed there. Keep it in sync with the lint (`scripts/lint_mockup_fidelity.js`) like any other contract text.
+
+For `app_type: "terminal"` projects every screenshot is a terminal window, authored with the WebTUI + terminal-frame classes already shipped in `branding.css`. The generic contract still holds — verbatim copy from source, realistic populated content, no invented colours, no annotations, chrome-once/clone-and-edit across steps — but the web rules about app shells, overlays, SVG icons, and light mode do not apply. Instead:
+
+- **`view_sources.json` for terminal steps:** `framework: "cli"`; per step, `url_or_route` = the command invocation, `primary_view` = the command's `definition_file` from `command_index` (a real path you opened with `Read`), **omit the `layout` key entirely**, `partials_expanded` = any additional source files the step's output/help text is drawn from, `verbatim_evidence` = ≥3 real strings from those files (the command name, flag names, help/print literals — **never strings containing emoji**: the lint would force them into the mockup and then reject the mockup for containing them), `default_user_assumptions` as usual. Persist resolved commands back to `project_map.command_index`, not `route_index`.
+- **Document skeleton (mandatory):**
+  ```
+  <!doctype html>
+  <html data-webtui-theme="<terminal_theme from branding.json>">
+  <head><meta charset="utf-8"><!-- INJECT_CSS --></head>
+  <body class="terminal-page" data-viewport="wide">
+    <div class="terminal-window">
+      <div class="terminal-titlebar">
+        <div class="terminal-titlebar-dots"><span class="terminal-titlebar-dot"></span><span class="terminal-titlebar-dot"></span><span class="terminal-titlebar-dot"></span></div>
+        <div class="terminal-titlebar-title">user@host: ~/path</div>
+      </div>
+      <div class="terminal-body">…command lines + output…</div>
+    </div>
+  </body>
+  ```
+  The `data-webtui-theme` attribute is required — without it the theme falls back to default greys. Keep `data-viewport="wide"`; do **not** use the small legacy `terminal`/`tui` viewport presets.
+- **Frame from provided classes only.** Build the window from the `.terminal-*` classes and WebTUI attribute components (`box-="round"` panels, `is-="button"`, `is-="badge"`, `is-="input"`, tables, `<pre>`). **Never define frame or window styles in your own `<style>` block** — the lint hard-fails classes that aren't in `branding.css` — and don't restyle the frame inline. Inside `.terminal-body`, command lines are `<div class="terminal-line"><span class="terminal-prompt">$</span><span class="terminal-cmd">…</span></div>` followed by `<span class="terminal-output">…</span>` blocks (`terminal-output--dim` for secondary text, `terminal-cursor` for a trailing prompt).
+- **Sizing.** The window spans the padded column (~95–100 monospace columns) — don't center a narrower window (the screenshot crops to content width, so side margins go lopsided). Cap a step at roughly 40 output rows.
+- **Realism.** One terminal window per step. The prompt line shows the real binary + subcommand + real flags from the definition file; the output below is modelled on the command's actual print/log/table statements — plausible values, real field names and phrasing. Sequential command + output pairs in one window are fine when the step genuinely runs commands in sequence. Output rows are consecutive — a blank line appears only where the real output prints one (author it as an empty `<span class="terminal-output"></span>`). A mockup whose only content is the typed prompt line is redundant — the article's fenced block carries the command; illustrate the output the reader must read, or the TUI state.
+- **Full-screen TUI states** (commands `cli_metadata.has_tui` marks as full-screen) fill `.terminal-body` with the app's screen instead of line output — and its panels are built from the **provided `.tui-*` classes, never hand-drawn borders**: `.tui-screen` (the screen column), `.tui-cols` (side-by-side panels), `.tui-panel` with a `.tui-panel-title` span (a bordered block with its title riding the border line, exactly like a ratatui titled block — add `.tui-panel--focused` on the panel holding the cursor), `.tui-row` for content lines and `.tui-row--active` for the selected row. A full-screen TUI replaces the shell prompt — no `$ cmd` line above it. **Never draw a panel border out of box-drawing glyphs across multiple rows** — every row would need the exact same character width, one character off shatters the right edge; the `.tui-panel` border is CSS and always crisp. Box-drawing glyphs are for *inline content only* (separators, tree lines, spinners, progress bars).
+- **Glyphs.** Box-drawing (`─ │ ┌ ┐ └ ┘ ├ ┤`), block elements (`▀ ▄ █ ░ ▒ ▓`), geometric shapes (`▲ ► ● ◆`), braille spinners (`⠋ ⠙ ⠹`), and `✓ ✔ ✗` are all safe. **NEVER use emoji or misc-symbol/dingbat characters** (`⚙ ★ ⚡ ✨ 🔗` and anything else in the emoji blocks, including their HTML entities) — the lint hard-fails them **even if the real CLI prints them**; substitute a safe glyph. No icon-font classes (`fa-*` / `bi-*` / `material-*` — they trigger a network fetch the render container blocks) and no SVG icon libraries.
+- **Colour.** Dark theme is the norm for terminal mockups (this overrides the web light-mode rule). Use only the theme's palette — those values are in `branding.css` and pass the lint automatically; anything else must be a neutral grey.

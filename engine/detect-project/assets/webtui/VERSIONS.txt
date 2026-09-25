@@ -1,0 +1,7 @@
+Built: 2026-07-02T09:47:21Z
+@webtui/css@0.1.9
+@webtui/theme-catppuccin@0.0.5
+@webtui/theme-gruvbox@0.0.3
+@webtui/theme-nord@0.0.4
+@webtui/theme-vitesse@0.0.3
+@webtui/theme-everforest@0.0.5

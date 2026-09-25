@@ -1,0 +1,55 @@
+{
+  "name": "supportpages-writer",
+  "version": "0.2.2",
+  "description": "SupportPages Writer — illustrated article authoring from your codebase",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SupportPages-io/supportpages-writer.git"
+  },
+  "homepage": "https://github.com/SupportPages-io/supportpages-writer#readme",
+  "bugs": {
+    "url": "https://github.com/SupportPages-io/supportpages-writer/issues"
+  },
+  "type": "module",
+  "bin": {
+    "supportpages-writer": "scripts/cli.mjs",
+    "supportpages-mcp": "dist/index.js",
+    "supportpages-setup": "scripts/install.mjs",
+    "supportpages": "scripts/cli.mjs"
+  },
+  "files": [
+    "dist",
+    "engine",
+    "scripts",
+    "install.sh",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "server.json"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && SUPPORTPAGES_TELEMETRY=0 node --test test/*.test.mjs",
+    "start": "node dist/index.js",
+    "prepack": "npm run build",
+    "setup": "node scripts/install.mjs",
+    "test:scenarios": "npm run build && node --test test/access-scenarios.test.mjs test/cli-scenarios.test.mjs"
+  },
+  "dependencies": {
+    "@clack/prompts": "1.6.0",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "marked": "17.0.6",
+    "puppeteer": "25.11.0",
+    "yauzl": "3.4.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "typescript": "5.9.3"
+  },
+  "mcpName": "io.github.supportpages-io/supportpages-writer"
+}

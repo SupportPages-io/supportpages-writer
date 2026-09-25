@@ -1,0 +1,76 @@
+{
+  "kind": "recommendations",
+  "items": [
+    {
+      "id": "18267044",
+      "section_id": "841848443",
+      "title": "How to set up webhooks",
+      "description": "Guide users through webhook configuration for real-time event notifications",
+      "justification": "New webhook feature added in recent PR enables powerful integrations",
+      "article_type": "how-to",
+      "status": "pending",
+      "article_id": null
+    },
+    {
+      "id": "263359508",
+      "section_id": "584768542",
+      "title": "Setting up two-factor authentication",
+      "description": "Secure your account with 2FA using authenticator apps or SMS",
+      "justification": "Security feature that all users should be aware of",
+      "article_type": "how-to",
+      "status": "pending",
+      "article_id": null
+    },
+    {
+      "id": "417424841",
+      "section_id": "841848443",
+      "title": "Exporting your data",
+      "description": "Learn how to export your data in various formats (CSV, JSON, PDF)",
+      "justification": "Data portability feature requested by enterprise customers",
+      "article_type": "how-to",
+      "status": "pending",
+      "article_id": null
+    },
+    {
+      "id": "505101646",
+      "section_id": "599425530",
+      "title": "How to use the faster app",
+      "description": "Tips for taking advantage of performance improvements",
+      "justification": "Users may want to know about the performance changes",
+      "article_type": "how-to",
+      "status": "rejected",
+      "article_id": "989034056"
+    },
+    {
+      "id": "683405660",
+      "section_id": "584768542",
+      "title": "How to handle errors",
+      "description": "A guide about error handling in the app",
+      "justification": "Users need to understand error scenarios",
+      "article_type": "how-to",
+      "status": "generated",
+      "article_id": "289431703"
+    },
+    {
+      "id": "942995810",
+      "section_id": "584768542",
+      "title": "How to enable dark mode",
+      "description": "A step-by-step guide to using dark mode",
+      "justification": "This PR adds dark mode support that users need to learn about",
+      "article_type": "how-to",
+      "status": "pending",
+      "article_id": "559991562"
+    },
+    {
+      "id": "942995823",
+      "section_id": "584768542",
+      "title": "A selected suggestion",
+      "description": null,
+      "justification": null,
+      "article_type": "how-to",
+      "status": "accepted",
+      "article_id": null
+    }
+  ],
+  "next_cursor": null
+}

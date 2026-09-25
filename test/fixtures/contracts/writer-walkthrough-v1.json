@@ -1,0 +1,22 @@
+{
+  "id": "6",
+  "project_id": "980190962",
+  "action": "create_video_walkthrough",
+  "execution": "hosted",
+  "attempt": 1,
+  "status": "succeeded",
+  "article_id": "989034056",
+  "walkthrough_id": "166808342",
+  "result": {
+    "walkthrough_id": "166808342",
+    "article_id": "989034056",
+    "review_url": "http://app.localhost:3001/projects/rtfm/walkthroughs_page?walkthrough=166808342",
+    "playback_url": "http://app.localhost:3001/projects/rtfm/walkthroughs_page?walkthrough=166808342",
+    "publication_pending": true
+  },
+  "error": null,
+  "created_at": "2026-09-21T11:13:39.623701Z",
+  "started_at": "2026-09-21T11:13:39.646382Z",
+  "finished_at": "2026-09-21T11:13:39.904835Z",
+  "review_url": "http://app.localhost:3001/projects/rtfm/walkthroughs_page?walkthrough=166808342"
+}

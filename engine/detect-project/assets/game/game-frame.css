@@ -1,0 +1,132 @@
+/* game-frame.css — hand-authored playfield frame for game-mode mockups.
+ * Appended AFTER the app's own compiled CSS by detect-project's game branch
+ * (STEP G2), so on any conflict plain source order gives these rules
+ * precedence — with !important reserved for the geometry rules arbitrary
+ * app CSS is known to fight (height chains).
+ *
+ * These classes ship in branding.css on purpose: the fidelity lint hard-fails
+ * classes that a mockup defines in its own <style> block, so the frame must be
+ * pre-defined here and mockups may only USE these class names.
+ *
+ * The load-bearing bits:
+ *   - .game-stage's 48px padding pairs with the `game` viewport preset in
+ *     render_mockup.js (preset width 1296 = max screen 1200 + 96). Unlike the
+ *     desktop stage it is justify-content: flex-start, NOT center: game screens
+ *     vary in size per project (game_metadata.display_size), and a left-anchored
+ *     screen at x=48 gives the content crop symmetric 48px margins for ANY
+ *     screen width — no per-game preset needed.
+ *   - html/body height:auto !important breaks full-viewport height chains
+ *     (canvas games routinely style body/#container at 100vh/100%); the screen
+ *     is the only fixed-height box, so the crop lands at screen bottom + 48px.
+ *   - .game-screen is a fixed-size, IN-FLOW, overflow:hidden playfield. This is
+ *     the structural fix for the observed failure mode where a scene authored
+ *     as position:fixed layers over an auto-height body measures a 0-height
+ *     content extent and screenshots near-blank. Everything in a game mockup —
+ *     scene, HUD, overlay menus — anchors inside it; position:fixed is never
+ *     used.
+ *   - The scene itself is an inline <svg class="game-scene" viewBox="0 0 W H">
+ *     where W×H is the game's LOGICAL canvas size: the viewBox does the
+ *     scaling into the display-sized screen, so scene coordinates stay in
+ *     logical game units copyable verbatim from the draw code (never a CSS
+ *     transform: scale).
+ */
+
+html {
+    height: auto !important;
+}
+
+.game-stage {
+    margin: 0;
+    /* height:auto + no bottom padding: the render crop adds its own 48px and
+     * the body background propagates to the canvas, so the margin paints. */
+    height: auto !important;
+    box-sizing: border-box;
+    padding: 48px 48px 0;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background: #101216;
+}
+
+/* The playfield. Default size fits a 16:10 desktop-web game; mockups size it
+ * per-game with an inline style copied verbatim from game_metadata.display_size
+ * (fit-width 1200 / fit-height 900 / 1:1 when the logical canvas is smaller). */
+.game-screen {
+    position: relative;
+    box-sizing: border-box;
+    width: 1200px;
+    height: 750px;
+    flex-shrink: 0;
+    overflow: hidden;
+    /* Layout+paint containment makes .game-screen the containing block for
+     * position:fixed DESCENDANTS and clips their paint. Real game CSS regularly
+     * positions its UI overlay containers fixed against the viewport; inside a
+     * mockup the screen IS the viewport, so faithful copies of that markup
+     * anchor and clip correctly here instead of escaping the frame. */
+    contain: layout paint;
+    background: #000000;
+    box-shadow: 0 22px 68px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+/* Headless Chromium on Linux paints space-occupying scrollbars; a game screen
+ * never shows one. */
+.game-screen ::-webkit-scrollbar {
+    display: none;
+}
+
+/* The canvas-scene host — a single inline SVG filling the screen. The viewBox
+ * carries the game's logical coordinate space; preserveAspectRatio and the
+ * display-sized .game-screen do the rest. */
+.game-scene {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* HUD stand-in for games whose HUD is CANVAS-DRAWN (game_metadata.hud_kind ==
+ * "canvas") — position it with inline top/left/right copied from the draw
+ * code. Games with a DOM HUD use their real markup instead (its CSS is already
+ * in branding.css). */
+.game-hud {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    gap: 24px;
+    white-space: nowrap;
+}
+
+.game-hud--stacked {
+    flex-direction: column;
+    gap: 4px;
+}
+
+.game-hud-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    white-space: nowrap;
+}
+
+/* Centered DOM overlay (menu / pause / game-over / name prompt) inside the
+ * screen. This replaces the position:fixed habit: real games position these
+ * overlays against the viewport, but in a mockup the screen IS the viewport.
+ * Dim the scene behind it with an inline neutral rgba background when the real
+ * overlay does. */
+.game-overlay-menu {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+}
+
+/* Pixel-art rendering for sprite/image content. */
+.game-pixelated {
+    image-rendering: pixelated;
+}

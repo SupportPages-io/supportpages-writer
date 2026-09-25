@@ -1,0 +1,20 @@
+{
+  "bundle_version": 1,
+  "local_article_id": "00000000-0000-4000-8000-000000000001",
+  "run_id": "00000000-0000-4000-8000-000000000002",
+  "skills_version": "1.46.0",
+  "source_commit": null,
+  "source_dirty": true,
+  "section_id": null,
+  "article_sha256": "2615d5f033675368f3273c0b86c7fc8135dbcfc16b212bdde4e8ea30d87c4f2e",
+  "images": [
+    {
+      "block_id": "invite",
+      "filename": "block_invite.png",
+      "sha256": "68e4f5e20f674b60deddf95797ef14e1ce7414fd77f9eb04d82a25ca811ad193",
+      "size": 68,
+      "mime_type": "image/png"
+    }
+  ],
+  "bundle_hash": "5695cc6626ddf61bc4818c9fea57abc2769a0d99ddf05e3da70b5085627153c2"
+}

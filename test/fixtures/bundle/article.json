@@ -1,0 +1,21 @@
+{
+  "schema_version": 2,
+  "title": "Invite a teammate",
+  "article_type": "how-to",
+  "blocks": [
+    {
+      "id": "intro",
+      "type": "prose",
+      "presentation": "lead",
+      "content": "Invite someone to your workspace."
+    },
+    {
+      "id": "invite",
+      "type": "section",
+      "presentation": "numbered",
+      "title": "Send the invitation",
+      "content": "Select **Invite**.",
+      "has_image": true
+    }
+  ]
+}

@@ -1,0 +1,195 @@
+/* terminal-frame.css — hand-authored terminal-window chrome for terminal-mode
+ * mockups. Concatenated AFTER webtui-core.css + the theme by detect-project's
+ * terminal branch, and deliberately UNLAYERED so these rules beat WebTUI's
+ * @layer rules on any conflict.
+ *
+ * These classes ship in branding.css on purpose: the fidelity lint hard-fails
+ * classes that a mockup defines in its own <style> block, so the frame must be
+ * pre-defined here and mockups may only USE these class names.
+ *
+ * Every colour reads a WebTUI theme variable with a dark fallback, so a
+ * document that forgot data-webtui-theme still renders as a legible dark
+ * terminal rather than unstyled white. Fonts are system monospace only — no
+ * webfont, no network (the render container blocks external requests).
+ */
+
+/* No min-height: the renderer crops to the content extent (+48px), and a
+ * viewport-tall body made every screenshot the full frame height with the
+ * window stranded at the top. Bottom padding is 0 because that crop margin
+ * supplies the bottom 48px; the html rule paints it in the page colour
+ * (WebTUI paints html with the darker --background0). */
+html:has(> body.terminal-page) {
+    background: var(--background1, #16161e);
+}
+
+.terminal-page {
+    margin: 0;
+    box-sizing: border-box;
+    padding: 48px 48px 0;
+    background: var(--background1, #16161e);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Cascadia Mono', Consolas, 'Liberation Mono', monospace;
+}
+
+.terminal-window {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--background0, #1a1a24);
+    border: 1px solid var(--background2, #33334a);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+}
+
+.terminal-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--background1, #22222e);
+    border-bottom: 1px solid var(--background2, #33334a);
+}
+
+.terminal-titlebar-dots {
+    display: flex;
+    gap: 7px;
+}
+
+.terminal-titlebar-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--background3, #55556a);
+}
+
+.terminal-titlebar-title {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: var(--foreground2, #888899);
+    /* keep the dots visually balanced */
+    margin-right: 45px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.terminal-body {
+    padding: 18px 20px 24px;
+    font-size: 14px;
+    /* 1.3 matches WebTUI's own --line-height and lets box-drawing glyphs
+     * (│ ├ └ …) connect vertically instead of rendering as dashed gaps */
+    line-height: 1.3;
+    color: var(--foreground0, #d8d8e0);
+    /* whitespace collapses at the body level so the HTML source's own
+     * formatting newlines between row elements don't render as blank lines
+     * (models legitimately author one block element per output row);
+     * pre-wrap lives on the content spans below instead */
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+/* A command line: <div class="terminal-line"><span class="terminal-prompt">$</span>
+ * <span class="terminal-cmd">git status</span></div> */
+.terminal-line {
+    display: block;
+}
+
+.terminal-prompt {
+    color: var(--foreground2, #7a7a90);
+    font-weight: 700;
+    margin-right: 8px;
+    user-select: none;
+}
+
+.terminal-cmd {
+    color: var(--foreground0, #e8e8f0);
+    font-weight: 700;
+}
+
+.terminal-cmd,
+.terminal-output {
+    white-space: pre-wrap;
+}
+
+.terminal-output {
+    display: block;
+    color: var(--foreground1, #b8b8c8);
+}
+
+/* an intentionally-empty output row (a blank separator line) keeps its height */
+.terminal-output:empty {
+    min-height: 1.3em;
+    min-height: 1lh;
+}
+
+.terminal-output--dim {
+    color: var(--foreground2, #7a7a90);
+}
+
+.terminal-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1.1em;
+    vertical-align: text-bottom;
+    background: var(--foreground1, #b8b8c8);
+    /* static screenshot — no blink animation */
+}
+
+/* ── TUI panels (ratatui-style titled blocks) ────────────────────────────────
+ * Full-screen TUI mockups build their panels from THESE classes — the border
+ * and the title-on-the-border come from CSS, deterministically. Models must
+ * never hand-draw multi-row box-drawing borders (every row needs exact
+ * character width or the right edge shatters); box-drawing glyphs are for
+ * inline content only (separators, tree lines, spinners, progress). */
+
+.tui-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-height: 100%;
+}
+
+.tui-cols {
+    display: flex;
+    gap: 2px;
+    align-items: stretch;
+}
+
+.tui-panel {
+    position: relative;
+    border: 1px solid var(--foreground2, #7a7a90);
+    border-radius: 2px;
+    padding: 10px 10px 8px;
+    margin-top: 0.65em; /* room for the title riding the border line */
+}
+
+.tui-panel-title {
+    position: absolute;
+    top: -0.72em;
+    left: 8px;
+    padding: 0 6px;
+    background: var(--background0, #1a1a24);
+    color: var(--foreground1, #b8b8c8);
+    font-size: inherit;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+/* the focused panel (where the cursor/input lives) highlights in the accent */
+.tui-panel--focused {
+    border-color: var(--blue, var(--foreground0, #e8e8f0));
+}
+
+.tui-panel--focused > .tui-panel-title {
+    color: var(--blue, var(--foreground0, #e8e8f0));
+}
+
+.tui-row {
+    display: block;
+    white-space: pre-wrap;
+}
+
+.tui-row--active {
+    background: var(--background2, #33334a);
+    color: var(--foreground0, #e8e8f0);
+}

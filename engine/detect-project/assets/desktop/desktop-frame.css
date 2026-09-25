@@ -1,0 +1,428 @@
+/* desktop-frame.css — hand-authored OS window chrome for desktop-mode mockups.
+ * Appended AFTER the app's own compiled CSS by detect-project's desktop branch
+ * (STEP D2), so on any conflict plain source order gives these rules
+ * precedence — with !important reserved for the geometry rules that arbitrary
+ * app CSS is known to fight (height chains).
+ *
+ * These classes ship in branding.css on purpose: the fidelity lint hard-fails
+ * classes that a mockup defines in its own <style> block, so the frame must be
+ * pre-defined here and mockups may only USE these class names. Same trick
+ * whitelists the traffic-light hexes for the lint's colour check.
+ *
+ * The load-bearing bits:
+ *   - .desktop-stage's 48px padding pairs with the macos/windows viewport
+ *     presets in render_mockup.js (preset width 1576 = window 1480 + 96) so
+ *     the content crop yields symmetric 48px margins. The 1480×900 window is
+ *     the same size as the `web` browser preset, so every PC-class capture
+ *     (browser, Electron/Tauri, Win32, macOS) comes out the same size.
+ *   - html/body height:auto !important breaks the app's own height chain
+ *     (#root { height: 100vh } is near-universal in Electron renderers); the
+ *     window is the only fixed-height box, so the crop lands at window
+ *     bottom + 48px instead of viewport bottom.
+ *   - .desktop-window is a fixed-size, overflow:hidden canvas: it clips app
+ *     content that is realistically taller than one window, exactly like
+ *     .device-screen does for phones.
+ *   - Caption glyphs (minimise/maximise/close) are pure CSS via currentColor —
+ *     never unicode (dingbat ✕ etc. would fail the emoji lint).
+ *   - window_chrome fork: "native" uses .desktop-titlebar; "hybrid" uses the
+ *     app's own header bar plus .desktop-traffic-lights--overlay /
+ *     .desktop-caption-buttons--overlay; "custom" uses no frame chrome at all.
+ */
+
+html {
+    height: auto !important;
+}
+
+.desktop-stage {
+    margin: 0;
+    /* height:auto + no bottom padding: the render crop adds its own 48px and
+     * the body background propagates to the canvas, so the margin paints. */
+    height: auto !important;
+    box-sizing: border-box;
+    padding: 48px 48px 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #eef0f3;
+}
+
+.desktop-window {
+    position: relative;
+    box-sizing: border-box;
+    width: 1480px;
+    height: 900px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--desktop-window-bg, #ffffff);
+    box-shadow: 0 22px 68px rgba(0, 0, 0, 0.33), 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.desktop-window--mac {
+    border-radius: 12px;
+}
+
+.desktop-window--win {
+    border-radius: 8px;
+}
+
+/* Headless Chromium on Linux paints space-occupying scrollbars; a real
+ * desktop-app screenshot shows none (overlay scrollbars / hidden until
+ * scrolled). */
+.desktop-window ::-webkit-scrollbar {
+    display: none;
+}
+
+/* ── Native titlebar (window_chrome: "native" only) ──────────────────────── */
+
+.desktop-titlebar {
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    background: var(--desktop-titlebar-bg, linear-gradient(#f9f9f9, #f0f0f0));
+    border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+}
+
+.desktop-window--mac .desktop-titlebar {
+    height: 38px;
+    padding: 0 20px;
+    font-family: -apple-system, 'SF Pro Text', system-ui, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.desktop-window--win .desktop-titlebar {
+    height: 32px;
+    padding: 0 0 0 12px;
+    font-family: 'Segoe UI Variable', 'Segoe UI', system-ui, Arial, sans-serif;
+}
+
+.desktop-window-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.82);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* macOS centers the title in the WINDOW, not in the space left over after the
+ * traffic lights — absolute centering reproduces that statically. */
+.desktop-window--mac .desktop-window-title {
+    position: absolute;
+    left: 80px;
+    right: 80px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.desktop-window--win .desktop-window-title {
+    font-size: 12px;
+    margin-right: auto;
+}
+
+/* ── macOS traffic lights ─────────────────────────────────────────────────── */
+
+.desktop-traffic-lights {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.desktop-traffic-lights span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.18);
+}
+
+.desktop-traffic-lights span:nth-child(1) {
+    background: #ff5f57;
+}
+
+.desktop-traffic-lights span:nth-child(2) {
+    background: #febc2e;
+}
+
+.desktop-traffic-lights span:nth-child(3) {
+    background: #28c840;
+}
+
+/* Hybrid chrome (titleBarStyle: hidden/hiddenInset): the app draws its own
+ * header bar and the SYSTEM draws the traffic lights over it — float them
+ * top-left of the window above the app's bar. */
+.desktop-traffic-lights--overlay {
+    position: absolute;
+    top: 14px;
+    left: 20px;
+    z-index: 10000;
+}
+
+/* ── Windows caption buttons ──────────────────────────────────────────────── */
+
+.desktop-caption-buttons {
+    display: flex;
+    align-self: stretch;
+    margin-left: auto;
+    flex-shrink: 0;
+    color: #1b1b1b;
+}
+
+.desktop-caption-buttons span {
+    position: relative;
+    width: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Minimise: a single hairline. */
+.desktop-caption-min::before {
+    content: '';
+    width: 10px;
+    height: 1px;
+    background: currentColor;
+}
+
+/* Maximise: a square outline. */
+.desktop-caption-max::before {
+    content: '';
+    box-sizing: border-box;
+    width: 9px;
+    height: 9px;
+    border: 1px solid currentColor;
+    border-radius: 1px;
+}
+
+/* Close: two crossed hairlines — never a unicode ✕ (emoji lint). */
+.desktop-caption-close::before,
+.desktop-caption-close::after {
+    content: '';
+    position: absolute;
+    width: 13px;
+    height: 1px;
+    background: currentColor;
+}
+
+.desktop-caption-close::before {
+    transform: rotate(45deg);
+}
+
+.desktop-caption-close::after {
+    transform: rotate(-45deg);
+}
+
+/* Hybrid chrome on Windows (titleBarOverlay): system caption buttons drawn
+ * over the app's own header bar, top-right of the window. */
+.desktop-caption-buttons--overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 32px;
+    z-index: 10000;
+}
+
+/* ── App UI container ─────────────────────────────────────────────────────── */
+
+.desktop-window-content {
+    position: relative;
+    flex: 1;
+    /* min-height:0 lets the flex item actually clip instead of growing the
+     * fixed-height window when app content (100vh roots, long lists) is
+     * taller than the window. */
+    min-height: 0;
+    overflow: hidden;
+    /* contain makes this element the containing block for position:fixed
+     * DESCENDANTS and clips their paint (the game-frame .game-screen trick).
+     * Real desktop-app CSS is written against "the viewport IS my window" —
+     * fixed sidebars/headers (`fixed top-0 left-0 h-screen`) are routine and
+     * the containing-chain rule makes mockups copy them verbatim. Without
+     * containment they anchor to the render viewport and paint OUTSIDE the
+     * OS frame (observed: meetily's fixed sidebar escaping to the stage's
+     * top-left while `ml-64` main content stayed inside). With it, fixed
+     * descendants anchor to the window content area — exactly where the real
+     * OS window puts them. Overlays are unaffected: the contract already
+     * mandates position:absolute for modals/dropdowns. */
+    contain: layout paint;
+}
+
+/* A lone app root must fill the window interior. Models sometimes hard-code a
+ * guessed pixel height on the root (e.g. height:860px inside the 900px window),
+ * leaving an unfilled strip of frame background below the app. min-height wins
+ * over an inline height, so a short root stretches to the window bottom while
+ * over-tall content still clips via the parent's overflow:hidden. Scoped to
+ * :only-child so multi-sibling layouts (app bar + main authored as siblings)
+ * keep their own sizing. */
+.desktop-window-content > :only-child {
+    min-height: 100%;
+}
+
+/* ── App macro-layout bones ───────────────────────────────────────────────────
+ * Layer these ONTO the app's real classes when authoring the shell. Real app
+ * stylesheets frequently size panes with runtime-dependent flex bases
+ * (flex-basis:100% sidebars, wrap rows, JS-measured panels) that collapse in a
+ * static mockup — a sidebar swallows the window and the main pane clips off the
+ * edge. These pin the macro proportions deterministically; the app's own CSS
+ * still paints all the visuals inside each pane. */
+/* !important is load-bearing: these are layered onto real app classes whose own
+ * rules (e.g. `body.theme-dark .sidebar { flex: 0 1 100% }`) out-specify a bare
+ * frame class — the bones must win the layout properties or they do nothing.
+ * Same pattern as the mobile frame reasserting F7's page-content offsets. */
+.desktop-app-rows {          /* vertical shell: titlebar/toolbar rows over content */
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100%;
+    min-height: 0;
+}
+.desktop-app-columns {       /* horizontal shell: sidebar(s) beside main pane */
+    display: flex !important;
+    flex-direction: row !important;
+    flex: 1 1 0 !important;
+    min-height: 0;
+    flex-wrap: nowrap !important;
+}
+.desktop-pane-fixed {        /* sidebar/rail — pair with an inline width from source */
+    flex: 0 0 auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 0;
+    overflow: hidden;
+}
+.desktop-pane-fill {         /* main content pane — takes the remaining space */
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ── Data-widget stand-ins ────────────────────────────────────────────────────
+ * Desktop apps routinely render trees, data grids, and code editors through JS
+ * widgets (grid libraries, editor components, design-system packages) whose CSS
+ * is runtime-generated or lives in an unbuilt package dist — so it is NOT in
+ * branding.css and can never be. Mockups must author self-contained stand-ins;
+ * these classes give them correct bones. Colours inherit from the app theme. */
+.desktop-tree-row {          /* sidebar tree/list row: icon + label per line */
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+}
+.desktop-tree-row--active {
+    background: rgba(128, 128, 128, 0.22);
+}
+table.desktop-table {        /* data grid: browser-native column alignment */
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    line-height: 1.35;
+}
+.desktop-table th {
+    text-align: left;
+    font-weight: 600;
+    padding: 6px 10px;
+    border-bottom: 2px solid rgba(128, 128, 128, 0.35);
+    white-space: nowrap;
+}
+.desktop-table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.18);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+}
+.desktop-code-editor {       /* code/query editor: gutter + mono content rows */
+    display: flex !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    overflow: hidden;
+}
+.desktop-code-gutter {       /* line numbers — one number per content line */
+    flex: 0 0 auto;
+    padding: 8px 10px 8px 14px;
+    text-align: right;
+    opacity: 0.45;
+    user-select: none;
+}
+.desktop-code-lines {
+    flex: 1 1 0;
+    padding: 8px 12px 8px 6px;
+    white-space: pre;
+    overflow: hidden;
+}
+
+/* Pane hygiene — a deliberate LOW-specificity net, no !important: when an app's
+ * own list-row CSS exists it out-specifies these and nothing changes; when the
+ * row styles live in an unbuilt package (so the mockup's rows would jam into
+ * one inline line), these paint them as sane rows. */
+.desktop-pane-fixed a,
+.desktop-pane-fixed li,
+.desktop-pane-fixed [class*="-item"] {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.desktop-toolbar {           /* horizontal control strip: search/filter/actions */
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    flex: 0 0 auto;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.desktop-statusbar {         /* bottom status strip — pins to the app-root bottom */
+    display: flex !important;
+    align-items: center;
+    gap: 14px;
+    margin-top: auto;
+    padding: 4px 12px;
+    font-size: 11.5px;
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+    flex: 0 0 auto;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* Dialogs. An app's own modal-surface CSS is frequently JS-injected or lives in
+ * an unbuilt package, so a bare app modal class renders TRANSPARENT with the
+ * page bleeding through. .desktop-modal guarantees an opaque, centered surface;
+ * the injector's window-bg bridge re-paints it in the app's own canvas colour
+ * when the app themes via body classes. */
+.desktop-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 900;
+}
+.desktop-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 8px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+    z-index: 1000;
+    max-width: 85%;
+    max-height: 85%;
+    overflow: hidden;
+}
+/* Fallback surface at ZERO specificity (:where) so the app's own dialog/surface
+ * class — layered onto .desktop-modal — always wins, regardless of source
+ * order. Without :where this stomped dark apps' dialogs white. */
+:where(.desktop-modal) {
+    background: var(--desktop-window-bg, #ffffff);
+}

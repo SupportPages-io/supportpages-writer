@@ -1,0 +1,199 @@
+name: SupportPages Writer release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish to R2 (select a matching vX.Y.Z tag)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# Serialise releases so two runs cannot replace the latest pointer out of order.
+concurrency:
+  group: supportpages-writer-release
+  cancel-in-progress: false
+
+env:
+  CLI_RELEASE_PUBLISH: ${{ github.event_name == 'push' || inputs.publish }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - run: node scripts/check-release.mjs
+
+  build:
+    needs: validate
+    environment: cli-release
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel, ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      # Chromium is downloaded at setup on the user's machine, not bundled.
+      - run: npm ci --no-audit --no-fund
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+      - name: Audit production dependencies, including the article renderer
+        run: npm audit --omit=dev --audit-level=high
+      - run: npm test
+      - name: Build self-contained release
+        shell: bash
+        run: |
+          runtime_dir="$(dirname "$(dirname "$(command -v node)")")"
+          node scripts/build-release.mjs --runtime-dir "$runtime_dir" --out release
+      - name: Install and update without system Node on PATH
+        run: node scripts/smoke-release.mjs --directory release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cli-${{ matrix.runner }}
+          path: release/*
+          if-no-files-found: error
+          retention-days: 14
+
+  verify:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cli-*
+          path: release
+          merge-multiple: true
+      - name: Verify all four archives and prepare installer and manifest
+        run: node scripts/publish-release.mjs --directory release --dry-run
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cli-release
+          path: release/*
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    if: ${{ github.event_name == 'push' || inputs.publish }}
+    needs: verify
+    runs-on: ubuntu-24.04
+    environment: cli-release
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: cli-release
+          path: release
+      - name: Check upload tooling
+        run: aws --version
+      - name: Publish immutable archives, then promote latest
+        env:
+          CLI_RELEASE_BUCKET: ${{ vars.CLI_RELEASE_BUCKET }}
+          CLI_RELEASE_R2_ENDPOINT: ${{ vars.CLI_RELEASE_R2_ENDPOINT }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.CLI_RELEASE_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.CLI_RELEASE_R2_SECRET_ACCESS_KEY }}
+        run: node scripts/publish-release.mjs --directory release
+
+  # The marketplace on main installs the plugin from the `plugin` branch, which
+  # holds a built tree: Claude Code and Codex copy it as-is and build nothing.
+  plugin:
+    if: ${{ github.event_name == 'push' || inputs.publish }}
+    needs: publish
+    runs-on: ubuntu-24.04
+    environment: cli-release
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+      - run: npm run build
+      - name: Build the plugin tree on the plugin branch
+        run: |
+          git fetch origin plugin || true
+          if git show-ref --verify --quiet refs/remotes/origin/plugin; then
+            git worktree add plugin-branch origin/plugin
+          else
+            git worktree add --detach plugin-branch
+            git -C plugin-branch checkout --orphan plugin
+            git -C plugin-branch rm -rfq . || true
+          fi
+          node scripts/build-plugin.mjs --out plugin-branch
+      - name: Commit and push the plugin branch
+        env:
+          REF: ${{ github.ref_name }}
+        run: |
+          cd plugin-branch
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Plugin build for $REF" || { echo "The plugin branch is already up to date"; exit 0; }
+          git push origin HEAD:refs/heads/plugin
+
+  # npm and the MCP Registry are published only when their credentials are
+  # configured (NPM_TOKEN secret; PUBLISH_MCP_REGISTRY variable set to true).
+  npm:
+    if: ${{ github.event_name == 'push' || inputs.publish }}
+    needs: publish
+    runs-on: ubuntu-24.04
+    environment: cli-release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci --no-audit --no-fund
+        env:
+          PUPPETEER_SKIP_DOWNLOAD: 'true'
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then echo "NPM_TOKEN is not set; skipping npm."; exit 0; fi
+          npm publish --provenance --access public
+      - name: Publish to the MCP Registry
+        if: ${{ vars.PUBLISH_MCP_REGISTRY == 'true' }}
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/latest/download/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish
